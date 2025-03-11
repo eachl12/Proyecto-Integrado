@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publicidad Web</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1A1A1A;
+            color: #FFB6C1;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .main-content {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 20px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            margin-left: 20px;
+        }
+        
+        h1 {
+            color: #FFB6C1;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            width: 100%;
+        }
+        
+        .text-section {
+            background-color: rgba(17, 102, 17, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            line-height: 1.6;
+            color: #D3D3D3;
+            border-left: 4px solid #116611;
+        }
+        
+        h2 {
+            color: #FFB6C1;
+            margin-top: 50px;
+            border-bottom: 2px solid #116611;
+            padding-bottom: 10px;
+        }
+        
+        /* Estilos para anuncios */
+        .ad {
+            margin: 20px 0;
+            background: linear-gradient(135deg, rgba(17, 102, 17, 0.3) 0%, rgba(255, 182, 193, 0.2) 100%);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .ad-sidebar {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .ad-title {
+            font-size: 18px;
+            color: #FFB6C1;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .ad-content {
+            color: #D3D3D3;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .ad-slogan {
+            font-style: italic;
+            color: #FFB6C1;
+            text-align: center;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .ad-image {
+            max-width: 100%;
+            max-height: 300px; /* Limitar altura máxima */
+            width: auto;
+            height: auto;
+            display: block;
+            margin: 10px auto;
+            border: 2px solid rgba(255, 182, 193, 0.3);
+        }
+        
+        .ad-logo {
+            max-width: 100px;
+            height: auto;
+            margin: 10px auto;
+            display: block;
+        }
+        
+        /* Popup de valla publicitaria */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .popup-billboard {
+            background: linear-gradient(135deg, rgba(17, 102, 17, 0.8) 0%, rgba(26, 26, 26, 0.9) 100%);
+            border-radius: 10px;
+            padding: 30px;
+            width: 80%;
+            max-width: 700px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #FFB6C1;
+            color: #1A1A1A;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+        
+        .popup-close:hover {
+            background-color: #ff8396;
+        }
+        
+        .billboard-product-container {
+            text-align: center;
+            border: 2px dashed #116611;
+            padding: 15px;
+            margin: 20px 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 90%;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Para evitar que las imágenes se salgan del contenedor */
+        }
+        
+        .billboard-product-container img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+        }
+        
+        .billboard-logo-container {
+            text-align: center;
+            border: 2px dashed #116611;
+            padding: 10px;
+            margin: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 150px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Para evitar que las imágenes se salgan del contenedor */
+        }
+        
+        .billboard-logo-container img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+        }
+        
+        .billboard-slogan {
+            font-size: 24px;
+            color: #FFB6C1;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            font-style: italic;
+        }
+        
+        .billboard-price {
+            font-size: 22px;
+            color: #D3D3D3;
+            padding: 10px 25px;
+            background-color: rgba(17, 102, 17, 0.5);
+            border-radius: 50px;
+            margin: 15px 0;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .button {
+            padding: 12px 25px;
+            background-color: #116611;
+            color: #FFB6C1;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            border: 2px solid #FFB6C1;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        
+        .button:hover {
+            background-color: #FFB6C1;
+            color: #1A1A1A;
+        }
+        
+        .ad-label {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #ccc;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            z-index: 10;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 30px;
+            }
+            
+            .main-content {
+                padding-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PUBLICIDAD WEB</h1>
+        
+        <div class="main-content">
+            <!-- Sección para el texto informativo -->
+            <div class="text-section">
+                <p>La diferencia entre una página web y la publicidad es que una página web es un documento digital completo accesible a través de un navegador, mientras que la publicidad es contenido promocional diseñado para persuadir. Una página web puede considerarse publicidad cuando su propósito principal es promover un producto, servicio o marca, como ocurre con los micrositios promocionales o landing pages.</p>
+            </div>
+            
+            <!-- Contenido principal -->
+            <h2>Ejemplos de Anuncios Web</h2>
+            <p>Los anuncios web son elementos publicitarios que aparecen en diferentes formatos y ubicaciones dentro de un sitio web. A continuación se muestran algunos ejemplos comunes de publicidad que podemos encontrar mientras navegamos:</p>
+            
+            <p>Los anuncios pueden integrarse directamente en el contenido de una página o aparecer como elementos separados. Su efectividad depende de factores como la relevancia para el usuario, el diseño atractivo y el llamado a la acción claro.</p>
+            
+            <p>Algunos anuncios son estáticos, mientras que otros utilizan elementos animados o interactivos para captar la atención del usuario. En todos los casos, deben estar claramente identificados como contenido publicitario para cumplir con las regulaciones.</p>
+            
+            <!-- Anuncio inline como post publicitario -->
+            <div class="ad">
+                <span class="ad-label">Anuncio</span>
+                <div class="ad-title">Curso de Marketing Digital</div>
+                <img src="marke.webp" class="ad-image">
+                <div class="ad-content">Domina las estrategias de SEO, SEM, redes sociales y email marketing con nuestro curso certificado. Más de 10,000 estudiantes satisfechos.</div>
+                <div class="ad-slogan">¡Convierte tu pasión en tu profesión!</div>
+            </div>
+            
+            <div class="footer">
+                <a href="index.html" class="button">Regresar a la página principal</a>
+            </div>
+        </div>
+        
+        <!-- Columna lateral derecha -->
+        <div class="sidebar">
+            <!-- Anuncio lateral como post publicitario -->
+            <div class="ad ad-sidebar">
+                <span class="ad-label">Anuncio</span>
+                <div class="ad-title">Pamelocos</div>
+                <img src="pamelocos.webp" alt="Servicio de streaming" class="ad-image">
+                <div class="ad-slogan">¡Una explosión de sabor!</div>
+                <div class="ad-content">Prueba ya la nueva sensación del verano, ya disponible en tiendas locales.</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Valla publicitaria emergente -->
+    <div class="popup-overlay" id="popupAd">
+        <div class="popup-billboard">
+            <button class="popup-close" id="closePopup">X</button>
+            <div class="billboard-product-container">
+                <img src="valla.webp" alt="Producto o imagen principal">
+            </div>
+            <div class="billboard-logo-container">
+                <img src="/api/placeholder/120/60" alt="Logotipo de la empresa">
+            </div>
+            <div class="billboard-slogan">¡OFERTA EXCLUSIVA SOLO HOY!</div>
+            <div class="billboard-price">$999.99</div>
+        </div>
+    </div>
+    
+    <script>
+        // Mostrar la valla publicitaria después de 3 segundos
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('popupAd').style.display = 'flex';
+            }, 3000);
+        });
+        
+        // Cerrar la valla publicitaria
+        document.getElementById('closePopup').addEventListener('click', function() {
+            document.getElementById('popupAd').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
