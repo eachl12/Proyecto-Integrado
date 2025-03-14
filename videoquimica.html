@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Explicativo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-color: #1A1A1A;
+            color: #FFB6C1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        h1 {
+            color: #FFB6C1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+        }
+        .text-box {
+            background-color: rgba(17, 102, 17, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: justify;
+            line-height: 1.6;
+            color: #D3D3D3;
+            border-left: 4px solid #116611;
+        }
+        
+        /* Estilos mejorados para el reproductor de video */
+        .video-container {
+            max-width: 400px;
+            margin: 40px auto;
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border: 3px solid #116611;
+        }
+        
+        .video-container video {
+            width: 100%;
+            display: block;
+            background-color: #000;
+        }
+        
+        /* Controles del video personalizados */
+        .custom-controls {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.3), transparent);
+            padding: 20px 15px 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .video-container:hover .custom-controls {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .control-button {
+            background-color: transparent;
+            border: none;
+            color: #FFB6C1;
+            width: 40px;
+            height: 40px;
+            margin: 0 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .control-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(17, 102, 17, 0.5);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+        
+        .control-button:hover::before {
+            transform: scale(1);
+        }
+        
+        .control-button:active {
+            transform: scale(0.9);
+        }
+        
+        .control-button i {
+            font-size: 18px;
+            line-height: 1;
+        }
+        
+        /* Botones específicos */
+        .play-button {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #FFB6C1;
+            background-color: rgba(17, 102, 17, 0.7);
+            box-shadow: 0 0 15px rgba(255, 182, 193, 0.3);
+        }
+        
+        .play-button:hover {
+            box-shadow: 0 0 20px rgba(255, 182, 193, 0.5);
+            transform: scale(1.05);
+        }
+        
+        .play-button .play-icon {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 10px 0 10px 16px;
+            border-color: transparent transparent transparent #FFB6C1;
+            margin-left: 4px;
+        }
+        
+        .play-button .pause-icon {
+            display: none;
+            width: 14px;
+            height: 18px;
+            position: relative;
+        }
+        
+        .play-button .pause-icon::before,
+        .play-button .pause-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 5px;
+            height: 18px;
+            background-color: #FFB6C1;
+        }
+        
+        .play-button .pause-icon::before {
+            left: 0;
+        }
+        
+        .play-button .pause-icon::after {
+            right: 0;
+        }
+        
+        .volume-button {
+            position: relative;
+        }
+        
+        .volume-button .volume-icon {
+            position: relative;
+            width: 18px;
+            height: 18px;
+        }
+        
+        .volume-button .volume-icon::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 3px;
+            width: 6px;
+            height: 12px;
+            background-color: #FFB6C1;
+            border-radius: 2px;
+        }
+        
+        .volume-button .volume-icon::after {
+            content: '';
+            position: absolute;
+            left: 8px;
+            bottom: 0;
+            width: 10px;
+            height: 0;
+            border-style: solid;
+            border-width: 9px 9px 9px 0;
+            border-color: transparent #FFB6C1 transparent transparent;
+        }
+        
+        .volume-slider {
+            position: absolute;
+            bottom: 45px;
+            left: 50%;
+            transform: translateX(-50%) scaleY(0);
+            width: 6px;
+            height: 80px;
+            background-color: rgba(255, 182, 193, 0.2);
+            border-radius: 3px;
+            transition: transform 0.3s;
+            transform-origin: bottom;
+            overflow: hidden;
+        }
+        
+        .volume-level {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            background-color: #FFB6C1;
+            transition: height 0.2s;
+        }
+        
+        .volume-button:hover .volume-slider {
+            transform: translateX(-50%) scaleY(1);
+        }
+        
+        .fullscreen-button .fullscreen-icon {
+            width: 14px;
+            height: 14px;
+            border: 2px solid #FFB6C1;
+            position: relative;
+        }
+        
+        .fullscreen-button .fullscreen-icon::before,
+        .fullscreen-button .fullscreen-icon::after {
+            content: '';
+            position: absolute;
+            background-color: #FFB6C1;
+        }
+        
+        .progress-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background-color: rgba(255, 182, 193, 0.2);
+            cursor: pointer;
+            transition: height 0.3s;
+        }
+        
+        .video-container:hover .progress-container {
+            height: 8px;
+        }
+        
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(to right, #116611, #FFB6C1);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        
+        .progress-handle {
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #FFB6C1;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .progress-container:hover .progress-handle {
+            opacity: 1;
+        }
+        
+        .timestamp {
+            position: absolute;
+            bottom: 60px;
+            left: 15px;
+            background-color: rgba(0,0,0,0.7);
+            color: #FFB6C1;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .video-container:hover .timestamp {
+            opacity: 1;
+        }
+        
+        /* Estilo para navegación */
+        .navigation {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .button {
+            padding: 12px 25px;
+            background-color: #116611;
+            color: #FFB6C1;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            border: 2px solid #FFB6C1;
+            display: inline-block;
+        }
+        
+        .button:hover {
+            background-color: #FFB6C1;
+            color: #1A1A1A;
+        }
+        
+        /* Decoración adicional */
+        .corner-decoration {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 182, 193, 0.2);
+            top: -40px;
+            right: -40px;
+            transform: rotate(45deg);
+            z-index: 1;
+        }
+        
+        /* Efecto de brillo en la barra de progreso */
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                          transparent, 
+                          rgba(255, 255, 255, 0.3), 
+                          transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <!-- Título principal -->
+        <h1>VIDEO EXPLICATIVO: RECETA DE BURBUJAS</h1>
+        
+        <!-- Cuadro de texto -->
+        <div class="text-box">
+            <p>En este video se presenta el proceso de preparación de recetas para crear burbujas de jabón duraderas. Se muestran dos recetas principales: la primera utiliza 40 ml de H₂O, 10 ml de jabón, 5 ml de glicerol y 5 g de sacarosa; mientras que la segunda mantiene los mismos componentes base pero sustituye la sacarosa por 5 g de dextrosa. Esta diferencia es crucial, ya que la sacarosa, al formar más puentes de hidrógeno con el agua, crea una solución más viscosa y estable que ralentiza la evaporación en la película de la burbuja, en comparación con la dextrosa que es un monosacárido más simple.</p>
+        </div>
+        
+        <!-- Reproductor de video personalizado -->
+        <div class="video-container">
+            <div class="corner-decoration"></div>
+            <video id="videoPlayer">
+                <source src="videoquimica.mp4" type="video/mp4">
+                Tu navegador no soporta el elemento de video.
+            </video>
+            
+            <!-- Controles personalizados -->
+            <div class="custom-controls">
+                <button class="control-button play-button" id="playButton">
+                    <div class="play-icon"></div>
+                    <div class="pause-icon"></div>
+                </button>
+                
+                <button class="control-button volume-button" id="volumeButton">
+                    <div class="volume-icon"></div>
+                    <div class="volume-slider">
+                        <div class="volume-level" id="volumeLevel"></div>
+                    </div>
+                </button>
+                
+                <button class="control-button fullscreen-button" id="fullscreenButton">
+                    <div class="fullscreen-icon"></div>
+                </button>
+            </div>
+            
+            <div class="timestamp" id="timestamp">00:00 / 00:00</div>
+            
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-handle"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botones de navegación horizontales -->
+        <div class="navigation">
+            <a href="quimica.html" class="button">Regresar a la página anterior</a>
+            <a href="index.html" class="button">Regresar a la página principal</a>
+        </div>
+    </div>
+
+    <script>
+        // Script para el funcionamiento del reproductor de video personalizado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del reproductor
+            const video = document.getElementById('videoPlayer');
+            const playButton = document.getElementById('playButton');
+            const playIcon = playButton.querySelector('.play-icon');
+            const pauseIcon = playButton.querySelector('.pause-icon');
+            const volumeButton = document.getElementById('volumeButton');
+            const volumeLevel = document.getElementById('volumeLevel');
+            const fullscreenButton = document.getElementById('fullscreenButton');
+            const progressBar = document.getElementById('progressBar');
+            const progressContainer = document.getElementById('progressContainer');
+            const timestamp = document.getElementById('timestamp');
+            
+            // Estado inicial
+            let isPlaying = false;
+            let isMuted = false;
+            let isFullscreen = false;
+            
+            // Formatear tiempo (segundos a MM:SS)
+            function formatTime(seconds) {
+                const minutes = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+            
+            // Actualizar tiempo mostrado
+            function updateTimestamp() {
+                const currentTime = formatTime(video.currentTime);
+const duration = formatTime(video.duration || 0);
+timestamp.textContent = `${currentTime} / ${duration}`;
+}
+
+// Actualizar la barra de progreso
+function updateProgressBar() {
+    if (video.duration) {
+        const percentage = (video.currentTime / video.duration) * 100;
+        progressBar.style.width = `${percentage}%`;
+    }
+}
+
+// Función para reproducir/pausar el video
+function togglePlay() {
+    if (isPlaying) {
+        video.pause();
+    } else {
+        video.play();
+    }
+    
+    // Actualizar estado y apariencia
+    isPlaying = !isPlaying;
+    playIcon.style.display = isPlaying ? 'none' : 'block';
+    pauseIcon.style.display = isPlaying ? 'block' : 'none';
+}
+
+// Función para silenciar/activar sonido
+function toggleMute() {
+    video.muted = !video.muted;
+    isMuted = video.muted;
+    
+    // Actualizar apariencia
+    volumeLevel.style.height = isMuted ? '0%' : `${video.volume * 100}%`;
+    volumeButton.style.opacity = isMuted ? 0.5 : 1;
+}
+
+// Función para cambiar volumen
+function changeVolume(event) {
+    const volumeSlider = document.querySelector('.volume-slider');
+    const rect = volumeSlider.getBoundingClientRect();
+    const clickPosition = rect.bottom - event.clientY;
+    const volumePercentage = Math.min(Math.max(clickPosition / rect.height, 0), 1);
+    
+    video.volume = volumePercentage;
+    volumeLevel.style.height = `${volumePercentage * 100}%`;
+    
+    // Si estaba en mudo, quitar el mudo
+    if (video.muted) {
+        video.muted = false;
+        isMuted = false;
+        volumeButton.style.opacity = 1;
+    }
+}
+
+// Función para activar/desactivar pantalla completa
+function toggleFullscreen() {
+    if (!isFullscreen) {
+        if (video.requestFullscreen) {
+            video.requestFullscreen();
+        } else if (video.webkitRequestFullscreen) { /* Safari */
+            video.webkitRequestFullscreen();
+        } else if (video.msRequestFullscreen) { /* IE11 */
+            video.msRequestFullscreen();
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            document.msExitFullscreen();
+        }
+    }
+    
+    isFullscreen = !isFullscreen;
+}
+
+// Función para cambiar posición del video
+function seek(event) {
+    const rect = progressContainer.getBoundingClientRect();
+    const seekPosition = (event.clientX - rect.left) / rect.width;
+    video.currentTime = seekPosition * video.duration;
+    updateProgressBar();
+    updateTimestamp();
+}
+
+// Event listeners para los controles
+playButton.addEventListener('click', togglePlay);
+volumeButton.addEventListener('click', toggleMute);
+document.querySelector('.volume-slider').addEventListener('click', function(event) {
+    event.stopPropagation();
+    changeVolume(event);
+});
+fullscreenButton.addEventListener('click', toggleFullscreen);
+progressContainer.addEventListener('click', seek);
+
+// Event listeners para el video
+video.addEventListener('timeupdate', function() {
+    updateProgressBar();
+    updateTimestamp();
+});
+
+video.addEventListener('play', function() {
+    isPlaying = true;
+    playIcon.style.display = 'none';
+    pauseIcon.style.display = 'block';
+});
+
+video.addEventListener('pause', function() {
+    isPlaying = false;
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+});
+
+video.addEventListener('volumechange', function() {
+    volumeLevel.style.height = `${video.volume * 100}%`;
+    volumeButton.style.opacity = video.muted ? 0.5 : 1;
+});
+
+video.addEventListener('loadedmetadata', function() {
+    updateTimestamp();
+});
+
+// Evento para detectar cambio de pantalla completa
+document.addEventListener('fullscreenchange', function() {
+    isFullscreen = !!document.fullscreenElement;
+});
+
+// También para webkit (Safari)
+document.addEventListener('webkitfullscreenchange', function() {
+    isFullscreen = !!document.webkitFullscreenElement;
+});
+
+// Evento para cuando el video termina
+video.addEventListener('ended', function() {
+    isPlaying = false;
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+    video.currentTime = 0;
+});
+
+// Mostrar controles temporalmente cuando se carga la página
+const customControls = document.querySelector('.custom-controls');
+customControls.style.opacity = 1;
+setTimeout(function() {
+    if (!isPlaying) {
+        customControls.style.opacity = '';
+    }
+}, 2000);
+
+// Manejar arrastre en la barra de progreso
+let isDragging = false;
+progressContainer.addEventListener('mousedown', function() {
+    isDragging = true;
+    video.pause();
+});
+
+document.addEventListener('mousemove', function(event) {
+    if (isDragging) {
+        const rect = progressContainer.getBoundingClientRect();
+        const seekPosition = Math.min(Math.max((event.clientX - rect.left) / rect.width, 0), 1);
+        progressBar.style.width = `${seekPosition * 100}%`;
+        video.currentTime = seekPosition * video.duration;
+        updateTimestamp();
+    }
+});
+
+document.addEventListener('mouseup', function() {
+    if (isDragging) {
+        isDragging = false;
+        if (isPlaying) {
+            video.play();
+        }
+    }
+});
+
+// Control de volumen con rueda del mouse
+document.querySelector('.volume-slider').addEventListener('wheel', function(event) {
+    event.preventDefault();
+    const delta = event.deltaY > 0 ? -0.1 : 0.1;
+    const newVolume = Math.min(Math.max(video.volume + delta, 0), 1);
+    video.volume = newVolume;
+    volumeLevel.style.height = `${newVolume * 100}%`;
+    
+    // Si estaba en mudo, quitar el mudo
+    if (video.muted && newVolume > 0) {
+        video.muted = false;
+        isMuted = false;
+        volumeButton.style.opacity = 1;
+    }
+});
+
+// Precargar video
+video.load();
+});
+</script>
+</body>
+</html>
