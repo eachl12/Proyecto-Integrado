@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Art Techniques</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #1A1A1A;
+            color: #FFB6C1;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .main-content {
+            flex: 1;
+            min-width: 300px;
+            padding-right: 20px;
+        }
+        
+        .sidebar {
+            width: 250px;
+            margin-left: 20px;
+        }
+        
+        h1 {
+            color: #FFB6C1;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            width: 100%;
+        }
+        
+        .text-section {
+            background-color: rgba(17, 102, 17, 0.3);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            line-height: 1.6;
+            color: #D3D3D3;
+            border-left: 4px solid #116611;
+        }
+        
+        h2 {
+            color: #FFB6C1;
+            margin-top: 30px;
+            border-bottom: 2px solid #116611;
+            padding-bottom: 10px;
+        }
+        
+        .art-card {
+            margin: 25px 0;
+            background: linear-gradient(135deg, rgba(17, 102, 17, 0.3) 0%, rgba(255, 182, 193, 0.2) 100%);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .art-title {
+            font-size: 20px;
+            color: #FFB6C1;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .art-content {
+            color: #D3D3D3;
+            margin-bottom: 15px;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        .art-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+            margin: 15px auto;
+            border: 2px solid rgba(17, 102, 17, 0.5);
+            max-height: 300px;
+        }
+        
+        .audio-player {
+            margin: 30px auto;
+            background-color: rgba(17, 102, 17, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+        
+        .audio-title {
+            font-size: 22px;
+            color: #FFB6C1;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .audio-button {
+            padding: 12px 24px;
+            background-color: #116611;
+            color: #FFB6C1;
+            border: 2px solid #FFB6C1;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+        
+        .audio-button:hover {
+            background-color: #FFB6C1;
+            color: #1A1A1A;
+            transform: scale(1.05);
+        }
+        
+        .audio-button:active {
+            transform: scale(0.98);
+        }
+        
+        .volume-container {
+            margin: 20px 0;
+            width: 80%;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .volume-slider {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: rgba(255, 182, 193, 0.3);
+            outline: none;
+            border-radius: 4px;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #FFB6C1;
+            cursor: pointer;
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #FFB6C1;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .audio-display {
+            font-size: 14px;
+            color: #D3D3D3;
+            margin: 10px 0;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            width: 100%;
+            padding: 20px 0;
+            /* Eliminar la línea verde del borde superior */
+        }
+        
+        .button {
+            padding: 10px 20px;
+            background-color: #116611;
+            color: #FFB6C1;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            border: 2px solid #FFB6C1;
+            display: inline-block;
+        }
+        
+        .button:hover {
+            background-color: #FFB6C1;
+            color: #1A1A1A;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 30px;
+            }
+            
+            .main-content {
+                padding-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DIGITAL ART TECHNIQUES</h1>
+        
+        <div class="main-content">
+            <!-- Introduction -->
+            <div class="text-section">
+                <p>Digital art has revolutionized the way artists create and express their ideas. Through different techniques, creators can develop impressive visual works using modern technology. Below, we explore some of the most popular techniques in contemporary digital art.</p>
+            </div>
+            
+            <!-- Audio Player -->
+            <div class="audio-player">
+                <div class="audio-title">Explore Digital Art with Audio</div>
+                <audio id="backgroundAudio" src="ingles.mp3"></audio>
+                
+                <div class="audio-controls">
+                    <button id="playButton" class="audio-button">▶ Play</button>
+                    <button id="pauseButton" class="audio-button">⏸️ Pause</button>
+                    <button id="stopButton" class="audio-button">⏹️ Stop</button>
+                </div>
+                
+                <div class="volume-container">
+                    <input type="range" min="0" max="100" value="70" class="volume-slider" id="volumeControl">
+                    <div class="audio-display">Volume: <span id="volumeValue">70</span>%</div>
+                </div>
+                
+                <div class="audio-display">
+                    Status: <span id="audioStatus">Stopped</span>
+                </div>
+            </div>
+            
+            <!-- Digital Art Content -->
+            <div class="art-card">
+                <div class="art-title">Vector Art</div>
+                <img src="vectorial.webp" class="art-image">
+                <div class="art-content">
+                    Uses graphics based on lines and geometric shapes, allowing images to be scaled without losing quality. It's ideal for logos and graphic design. The most popular programs for creating vector art include Adobe Illustrator, Inkscape, and CorelDRAW.
+                </div>
+            </div>
+            
+            <div class="art-card">
+                <div class="art-title">Pixel Art</div>
+                <img src="pixel.webp" alt="Pixel Art Example" class="art-image">
+                <div class="art-content">
+                    Based on the precise placement of pixels to create images with a retro style, widely used in video games and animations. This style emerged in the early days of video games due to technical limitations, but today it is appreciated as a distinctive art form with nostalgic charm.
+                </div>
+            </div>
+            
+            <div class="art-card">
+                <div class="art-title">Generative Art</div>
+                <img src="generativo.webp" alt="Generative Art Example" class="art-image">
+                <div class="art-content">
+                    Uses algorithms and programming to generate unique images, combining human creativity and technology. Artists create systems of rules and algorithms that determine aspects of the work, but the final result often contains unpredictable elements, creating unique works of art each time the code is executed.
+                </div>
+            </div>
+            
+            <div class="art-card">
+                <div class="art-title">3D Modeling</div>
+                <img src="3d.webp" alt="3D Modeling Example" class="art-image">
+                <div class="art-content">
+                    Allows the creation of three-dimensional representations used in animation, video games, and industrial design. 3D artists use specialized software to model objects using polygons, creating complete virtual worlds with textures, lighting, and effects that simulate reality or create fantastic visions.
+                </div>
+            </div>
+            
+            <div class="art-card">
+                <div class="art-title">Digital Airbrushing</div>
+                <img src="aerografia.jpg" alt="Digital Airbrushing Example" class="art-image">
+                <div class="art-content">
+                    Used to retouch and perfect images, correcting imperfections and enhancing colors in photography and advertising. Artists use tools such as digital brushes that simulate traditional airbrushes, allowing precise control over color application and creating smooth transitions between tones.
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right sidebar column -->
+        <div class="sidebar">
+            <div class="text-section">
+                <h2>Resources for Artists</h2>
+                <p>If you want to explore these digital art techniques, there are numerous online resources, tutorials, and communities where you can learn and share your work.</p>
+                <p>Some popular tools include:</p>
+                <ul>
+                    <li>Adobe Creative Suite</li>
+                    <li>Procreate</li>
+                    <li>Blender</li>
+                    <li>Aseprite</li>
+                    <li>Processing</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <a href="index.html" class="button">Regresar a la Página Principal</a>
+    </div>
+    
+    <script>
+        // Audio player functionality
+        const audio = document.getElementById('backgroundAudio');
+        const playButton = document.getElementById('playButton');
+        const pauseButton = document.getElementById('pauseButton');
+        const stopButton = document.getElementById('stopButton');
+        const volumeControl = document.getElementById('volumeControl');
+        const volumeValue = document.getElementById('volumeValue');
+        const audioStatus = document.getElementById('audioStatus');
+        
+        // Function to play audio
+        playButton.addEventListener('click', function() {
+            audio.play();
+            audioStatus.textContent = 'Playing';
+        });
+        
+        // Function to pause audio
+        pauseButton.addEventListener('click', function() {
+            audio.pause();
+            audioStatus.textContent = 'Paused';
+        });
+        
+        // Function to stop audio (pause and reset)
+        stopButton.addEventListener('click', function() {
+            audio.pause();
+            audio.currentTime = 0;
+            audioStatus.textContent = 'Stopped';
+        });
+        
+        // Volume control
+        volumeControl.addEventListener('input', function() {
+            const volume = this.value / 100;
+            audio.volume = volume;
+            volumeValue.textContent = this.value;
+        });
+        
+        // Initialize volume
+        audio.volume = volumeControl.value / 100;
+    </script>
+</body>
+</html>
