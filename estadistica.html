@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Califica nuestra página</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-color: #1A1A1A;
+            color: #FFB6C1;
+        }
+        .logo {
+            max-width: 200px;
+            margin: 20px auto;
+            border: 3px solid #116611;
+            filter: grayscale(20%);
+        }
+        .introduccion {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: rgba(17, 102, 17, 0.3);
+            border-radius: 10px;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #116611;
+            color: #FFB6C1;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            border: 2px solid #FFB6C1;
+            display: inline-block;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #FFB6C1;
+            color: #1A1A1A;
+        }
+        h1 {
+            color: #FFB6C1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        h2 {
+            color: #FFB6C1;
+        }
+        h3 {
+            color: #FFB6C1;
+        }
+        p {
+            color: #D3D3D3;
+        }
+        .form-container {
+            background-color: rgba(17, 102, 17, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: left;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #FFB6C1;
+        }
+        .radio-options {
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: center;
+        }
+        .radio-option input {
+            margin-right: 5px;
+        }
+        .graphics-section {
+            display: none;
+            background-color: rgba(17, 102, 17, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .chart-container {
+            background-color: #1A1A1A;
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 70px;
+            height: 250px; /* Reducido de 300px para hacer las gráficas más pequeñas */
+            position: relative;
+            border: 1px solid rgba(17, 102, 17, 0.5);
+            overflow: hidden; /* Evita que el contenido se salga */
+        }
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+        }
+        .buttons-container {
+            margin: 20px 0;
+        }
+        .success-message {
+            display: none;
+            background-color: rgba(0, 128, 0, 0.2);
+            color: #FFB6C1;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error-message {
+            display: none;
+            background-color: rgba(255, 0, 0, 0.2);
+            color: #FFB6C1;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .admin-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 40px; /* Aumentado de 20px a 40px para más separación */
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        #responseCounter {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: rgba(17, 102, 17, 0.3);
+            border-radius: 5px;
+            font-size: 1.2em;
+        }
+        /* Añadir clase para la leyenda */
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+    </style>
+    <!-- Incluir Chart.js para las gráficas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <!-- Logo -->
+    <img src="logo.jpg" alt="Logo" class="logo">
+
+    <!-- Introducción -->
+    <div class="introduccion">
+        <h1>CALIFICA NUESTRA PÁGINA</h1>
+        <p>Tu opinión es importante para nosotros. Por favor completa la siguiente encuesta.</p>
+    </div>
+
+    <!-- Formulario -->
+    <div class="form-container">
+        <form id="ratingForm">
+            <div class="form-group">
+                <label>1. ¿Te resultó útil esta página?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="usefulness-yes" name="usefulness" value="Sí" required>
+                        <label for="usefulness-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="usefulness-no" name="usefulness" value="No">
+                        <label for="usefulness-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>2. ¿La página cargó rápidamente en tu navegador?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="loading-yes" name="loading" value="Sí" required>
+                        <label for="loading-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="loading-no" name="loading" value="No">
+                        <label for="loading-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>3. ¿La información en la página fue clara y fácil de entender?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="clarity-yes" name="clarity" value="Sí" required>
+                        <label for="clarity-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="clarity-no" name="clarity" value="No">
+                        <label for="clarity-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>4. ¿La página tenía un diseño atractivo y visualmente agradable?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="design-yes" name="design" value="Sí" required>
+                        <label for="design-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="design-no" name="design" value="No">
+                        <label for="design-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>5. ¿Fue fácil navegar por la página y encontrar la información de los cursos?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="navigation-yes" name="navigation" value="Sí" required>
+                        <label for="navigation-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="navigation-no" name="navigation" value="No">
+                        <label for="navigation-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>6. ¿Consideras que el experimento fue explicado de manera clara y concisa?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="experiment-yes" name="experiment" value="Sí" required>
+                        <label for="experiment-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="experiment-no" name="experiment" value="No">
+                        <label for="experiment-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>7. ¿Consideras que la página es apta para todas las edades?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="age-appropriate-yes" name="ageAppropriate" value="Sí" required>
+                        <label for="age-appropriate-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="age-appropriate-no" name="ageAppropriate" value="No">
+                        <label for="age-appropriate-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>8. ¿Experimentaste algún problema durante tu navegación en la página?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="problems-yes" name="problems" value="Sí" required>
+                        <label for="problems-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="problems-no" name="problems" value="No">
+                        <label for="problems-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>9. ¿Te gustaría volver a visitar esta página en el futuro?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="revisit-yes" name="revisit" value="Sí" required>
+                        <label for="revisit-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="revisit-no" name="revisit" value="No">
+                        <label for="revisit-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>10. ¿Recomendarías esta página a amigos o familiares?</label>
+                <div class="radio-options">
+                    <div class="radio-option">
+                        <input type="radio" id="recommend-yes" name="recommend" value="Sí" required>
+                        <label for="recommend-yes">Sí</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="recommend-no" name="recommend" value="No">
+                        <label for="recommend-no">No</label>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="button">ENVIAR RESPUESTA</button>
+        </form>
+        <div id="successMessage" class="success-message">¡Gracias por tu respuesta!</div>
+        <div id="errorMessage" class="error-message">Por favor, responde todas las preguntas.</div>
+    </div>
+
+    <!-- Botones -->
+    <div class="buttons-container">
+        <button class="button" id="toggleGraphics">VER GRÁFICAS</button>
+    </div>
+
+    <!-- Sección de gráficas (inicialmente oculta) -->
+    <div id="graphicsSection" class="graphics-section">
+        <h2>Resultados de las Calificaciones</h2>
+        <div id="responseCounter"></div>
+
+        <!-- Leyenda común para todas las gráficas -->
+        <div class="chart-legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: rgba(17, 102, 17, 0.7);"></div>
+                <span>Sí</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: rgba(255, 99, 132, 0.7);"></div>
+                <span>No</span>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>1. ¿Te resultó útil esta página?</h3>
+            <canvas id="usefulnessChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>2. ¿La página cargó rápidamente en tu navegador?</h3>
+            <canvas id="loadingChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>3. ¿La información en la página fue clara y fácil de entender?</h3>
+            <canvas id="clarityChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>4. ¿La página tenía un diseño atractivo y visualmente agradable?</h3>
+            <canvas id="designChart"></canvas>
+        </div>
+
+<div class="chart-container">
+    <h3>5. ¿Fue fácil navegar por la página y encontrar toda la información?</h3>
+    <canvas id="navigationChart"></canvas>
+</div>
+
+<div class="chart-container">
+    <h3>6. ¿Consideras que el experimento fue explicado de manera clara?</h3>
+    <canvas id="experimentChart"></canvas>
+</div>
+
+        <div class="chart-container">
+            <h3>7. ¿Consideras que la página es apta para todas las edades?</h3>
+            <canvas id="ageAppropriateChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>8. ¿Experimentaste algún problema durante tu navegación en la página?</h3>
+            <canvas id="problemsChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>9. ¿Te gustaría volver a visitar esta página en el futuro?</h3>
+            <canvas id="revisitChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <h3>10. ¿Recomendarías esta página a amigos o familiares?</h3>
+            <canvas id="recommendChart"></canvas>
+        </div>
+        
+        <div class="admin-buttons">
+            <button class="button" id="resetData" style="background-color: #990000;">REINICIAR DATOS</button>
+            <button class="button" id="exportData" style="background-color: #000066;">EXPORTAR DATOS</button>
+        </div>
+    </div>
+
+    <!-- Pie de página con botón de regreso -->
+    <div class="footer">
+        <a href="index.html" class="button">Regresar a la Página Principal</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Referencias a elementos del DOM
+            const form = document.getElementById('ratingForm');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const toggleButton = document.getElementById('toggleGraphics');
+            const graphicsSection = document.getElementById('graphicsSection');
+            const resetButton = document.getElementById('resetData');
+            const exportButton = document.getElementById('exportData');
+
+            // Inicializar el almacenamiento si no existe
+            if (!localStorage.getItem('ratings')) {
+                localStorage.setItem('ratings', JSON.stringify({
+                    usefulness: { 'Sí': 0, 'No': 0 },
+                    loading: { 'Sí': 0, 'No': 0 },
+                    clarity: { 'Sí': 0, 'No': 0 },
+                    design: { 'Sí': 0, 'No': 0 },
+                    navigation: { 'Sí': 0, 'No': 0 },
+                    experiment: { 'Sí': 0, 'No': 0 },
+                    ageAppropriate: { 'Sí': 0, 'No': 0 },
+                    problems: { 'Sí': 0, 'No': 0 },
+                    revisit: { 'Sí': 0, 'No': 0 },
+                    recommend: { 'Sí': 0, 'No': 0 }
+                }));
+            }
+
+            // Manejo del envío del formulario
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Verificar que todas las preguntas estén respondidas
+                const formData = new FormData(form);
+                const questions = ['usefulness', 'loading', 'clarity', 'design', 'navigation', 
+                                'experiment', 'ageAppropriate', 'problems', 'revisit', 'recommend'];
+                
+                let allAnswered = true;
+                for (const question of questions) {
+                    if (!formData.get(question)) {
+                        allAnswered = false;
+                        break;
+                    }
+                }
+
+                if (!allAnswered) {
+                    errorMessage.style.display = 'block';
+                    successMessage.style.display = 'none';
+                    return;
+                }
+
+                // Obtener datos existentes
+                let ratings = JSON.parse(localStorage.getItem('ratings'));
+
+                // Actualizar contadores
+                for (const question of questions) {
+                    const answer = formData.get(question);
+                    ratings[question][answer]++;
+                }
+
+                // Guardar datos actualizados
+                localStorage.setItem('ratings', JSON.stringify(ratings));
+
+                // Mostrar mensaje de éxito y resetear formulario
+                successMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+                form.reset();
+
+                // Si las gráficas están visibles, actualizarlas
+                if (graphicsSection.style.display === 'block') {
+                    renderCharts();
+                    updateResponseCounter();
+                }
+
+                // Ocultar mensaje de éxito después de 3 segundos
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            });
+
+            // Manejo del botón de gráficas
+            toggleButton.addEventListener('click', function() {
+                if (graphicsSection.style.display === 'block') {
+                    graphicsSection.style.display = 'none';
+                    toggleButton.textContent = 'VER GRÁFICAS';
+                } else {
+                    graphicsSection.style.display = 'block';
+                    toggleButton.textContent = 'OCULTAR GRÁFICAS';
+                    renderCharts();
+                    updateResponseCounter();
+                }
+            });
+
+            // Función para crear gráficas de pastel
+            function createPieChart(elementId, data, title) {
+                const ctx = document.getElementById(elementId).getContext('2d');
+                
+                // Colores para los segmentos del gráfico
+                const colors = [
+                    'rgba(17, 102, 17, 0.7)',   // Verde
+                    'rgba(255, 99, 132, 0.7)'   // Rosa
+                ];
+
+                // Si hay un gráfico existente, destruirlo
+                if (window.chartInstances && window.chartInstances[elementId]) {
+                    window.chartInstances[elementId].destroy();
+                }
+
+                // Crear el nuevo gráfico
+                const chart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(data),
+                        datasets: [{
+                            data: Object.values(data),
+                            backgroundColor: colors,
+                            borderColor: 'rgba(255, 255, 255, 0.5)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false // Ocultar leyenda individual ya que tenemos una leyenda común
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.dataset.data.reduce((acc, val) => acc + val, 0);
+                                        const percentage = total > 0 ? Math.round((value * 100) / total) : 0;
+                                        return `${label}: ${value} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Guardar la instancia del gráfico para poder destruirla después
+                if (!window.chartInstances) {
+                    window.chartInstances = {};
+                }
+                window.chartInstances[elementId] = chart;
+            }
+
+            // Función para renderizar todas las gráficas
+            function renderCharts() {
+                const ratings = JSON.parse(localStorage.getItem('ratings'));
+                
+                createPieChart('usefulnessChart', ratings.usefulness, '¿Te resultó útil esta página?');
+                createPieChart('loadingChart', ratings.loading, '¿La página cargó rápidamente en tu navegador?');
+                createPieChart('clarityChart', ratings.clarity, '¿La información en la página fue clara y fácil de entender?');
+                createPieChart('designChart', ratings.design, '¿La página tenía un diseño atractivo y visualmente agradable?');
+                createPieChart('navigationChart', ratings.navigation, '¿Fue fácil navegar por la página y encontrar la información de los cursos?');
+                createPieChart('experimentChart', ratings.experiment, '¿Consideras que el experimento fue explicado de manera clara y concisa?');
+                createPieChart('ageAppropriateChart', ratings.ageAppropriate, '¿Consideras que la página es apta para todas las edades?');
+                createPieChart('problemsChart', ratings.problems, '¿Experimentaste algún problema durante tu navegación en la página?');
+                createPieChart('revisitChart', ratings.revisit, '¿Te gustaría volver a visitar esta página en el futuro?');
+                createPieChart('recommendChart', ratings.recommend, '¿Recomendarías esta página a amigos o familiares?');
+            }
+
+            // Función para añadir algunos datos de ejemplo (solo para demostración)
+            function addSampleData() {
+                let ratings = JSON.parse(localStorage.getItem('ratings'));
+                
+                // Si no hay datos, agregar algunos ejemplos
+                if (ratings.usefulness['Sí'] === 0 && ratings.usefulness['No'] === 0) {
+                    ratings.usefulness['Sí'] += 15;
+                    ratings.usefulness['No'] += 5;
+                    ratings.loading['Sí'] += 12;
+                    ratings.loading['No'] += 8;
+                    ratings.clarity['Sí'] += 18;
+                    ratings.clarity['No'] += 2;
+                    ratings.design['Sí'] += 14;
+                    ratings.design['No'] += 6;
+                    ratings.navigation['Sí'] += 13;
+                    ratings.navigation['No'] += 7;
+                    ratings.experiment['Sí'] += 16;
+                    ratings.experiment['No'] += 4;
+                    ratings.ageAppropriate['Sí'] += 17;
+                    ratings.ageAppropriate['No'] += 3;
+                    ratings.problems['Sí'] += 6;
+                    ratings.problems['No'] += 14;
+                    ratings.revisit['Sí'] += 16;
+                    ratings.revisit['No'] += 4;
+                    ratings.recommend['Sí'] += 17;
+                    ratings.recommend['No'] += 3;
+                    
+                    localStorage.setItem('ratings', JSON.stringify(ratings));
+                }
+            }
+            
+            // Añadir datos de ejemplo para tener algo que mostrar en las gráficas
+            addSampleData();
+            
+            // Función para actualizar el contador de respuestas
+            function updateResponseCounter() {
+                const ratings = JSON.parse(localStorage.getItem('ratings'));
+                const totalResponses = ratings.usefulness['Sí'] + ratings.usefulness['No'];
+                
+                const counterDiv = document.getElementById('responseCounter');
+                counterDiv.innerHTML = `<p><strong>Total de respuestas recibidas:</strong> ${totalResponses}</p>`;
+            }
+            
+            // Reiniciar datos
+            resetButton.addEventListener('click', function() {
+                if (confirm('¿Estás seguro de que deseas reiniciar todos los datos de calificaciones?')) {
+                    localStorage.setItem('ratings', JSON.stringify({
+                        usefulness: { 'Sí': 0, 'No': 0 },
+                        loading: { 'Sí': 0, 'No': 0 },
+                        clarity: { 'Sí': 0, 'No': 0 },
+                        design: { 'Sí': 0, 'No': 0 },
+                        navigation: { 'Sí': 0, 'No': 0 },
+                        experiment: { 'Sí': 0, 'No': 0 },
+                        ageAppropriate: { 'Sí': 0, 'No': 0 },
+                        problems: { 'Sí': 0, 'No': 0 },
+                        revisit: { 'Sí': 0, 'No': 0 },
+                        recommend: { 'Sí': 0, 'No': 0 }
+                    }));
+                    
+                    renderCharts();
+                    updateResponseCounter();
+                    alert('Datos reiniciados correctamente.');
+                }
+            });
+            
+            // Exportar datos
+            exportButton.addEventListener('click', function() {
+                const ratings = JSON.parse(localStorage.getItem('ratings'));
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ratings, null, 2));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", "ratings_data.json");
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+            });
+        });
+    </script>
+</body>
+</html>
